@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
       this.board = document.getElementById('board');
       this.cells = []
     }
+
     createBoard = () => {
       this.board.style.width = `${this.boardWidth * 10}px`;
       this.board.style.height = `${this.boardHeight * 10}px`;
@@ -22,7 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
         })
       })
     }
+
+    getCoordinates = (x, y) => {
+      const index = (x - 1) + (y - 1) * this.boardWidth;
+      return this.cells[index];
+    }
   }
+
   const game = new GameOfLife(10,10);
   game.createBoard();
 })
