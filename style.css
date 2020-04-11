@@ -30,3 +30,16 @@ body {
     margin: 50px auto;
     width: auto;
 }
+
+#game-set {
+    position: fixed;
+    top: 10px;
+    left: 40%;
+
+
+}
+button {
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: bold;
+}

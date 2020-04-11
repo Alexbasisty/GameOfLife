@@ -92,14 +92,25 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    startGame = () => {
+      this.idInterval = setInterval(() => {
+        this.printNextGeneration()
+      }, 350)
+    }
+
+    pauseGame = () => {
+      clearInterval(this.idInterval)
+    }
   }
 
-  const game = new GameOfLife(50 ,50);
+  const fieldWidth = prompt('Wpisz szerokość pola');
+  const fieldHeight = prompt('Wpisz wysokość pola');
+
+  const game = new GameOfLife(fieldWidth ,fieldHeight);
   const playButton = document.getElementById('play');
   const pauseButton = document.getElementById('pause');
-  // setInterval(game.printNextGeneration, 350)
-  playButton.addEventListener('click', game.printNextGeneration);
-  // pauseButton.addEventListener('click', clearInterval(game.printNextGeneration));
+  playButton.addEventListener('click', game.startGame);
+  pauseButton.addEventListener('click', game.pauseGame)
   game.createBoard();
   game.firstGlider();
 })
