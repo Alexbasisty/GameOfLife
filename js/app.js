@@ -16,12 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
         this.board.appendChild(newDiv);
         this.cells.push(newDiv);
       }
-
-      this.cells.forEach(cell => {
-        cell.addEventListener('click', event => {
-          event.target.classList.toggle('live')
+      this.board.addEventListener('click', () => {
+        this.cells.forEach(cell => {
+          cell.addEventListener('mousemove', event => {
+            event.target.classList.toggle('live')
+          })
         })
       })
+
     }
 
     getCoordinates = (x, y) => {
@@ -42,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     computeCellNextState = (x, y) => {
-      const div = this.getCoordinates(x, y);
+      const div = this.getCoordinates(x, y)
       const neighbour1 = this.getCoordinates(x - 1, y - 1);
       const neighbour2 = this.getCoordinates(x, y - 1);
       const neighbour3 = this.getCoordinates(x + 1, y - 1);
@@ -60,18 +62,20 @@ document.addEventListener('DOMContentLoaded', () => {
       if (neighbour6 !== undefined && neighbour6.className === 'live') {liveCells ++}
       if (neighbour7 !== undefined && neighbour7.className === 'live') {liveCells ++}
       if (neighbour8 !== undefined && neighbour8.className === 'live') {liveCells ++}
-      if (liveCells < 2 || liveCells > 3) {
+      if (div.className === 'live' && liveCells === 2 || liveCells === 3) {
+        return 1
+      } else if (div.className === 'live' && liveCells < 2 || liveCells > 3){
         return 0
-      } else {
+      } else if (div.className !== 'live' && liveCells === 3) {
         return 1
       }
     }
 
     computeNextGeneration = () => {
       let futureStates = [];
-      for(let i = 1; i <= 10; i++) {
-        for(let j = 1; j <= 10; j++) {
-          futureStates.push(this.computeCellNextState(i, j))
+      for(let i = 1; i <= this.boardWidth; i++) {
+        for(let j = 1; j <= this.boardHeight; j++) {
+          futureStates.push(this.computeCellNextState(j, i))
         }
       }
       return futureStates;
@@ -79,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     printNextGeneration = () => {
       let states = this.computeNextGeneration()
-      for(let i = 0; i < 100; i++) {
+      for(let i = 0; i < this.cells.length; i++) {
         if(states[i] === 1) {
           this.cells[i].classList.add('live')
         } else {
@@ -90,9 +94,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   }
 
-  const game = new GameOfLife(10,10);
+  const game = new GameOfLife(50 ,50);
   const playButton = document.getElementById('play');
-  playButton.addEventListener('click', game.printNextGeneration)
+  const pauseButton = document.getElementById('pause');
+  // setInterval(game.printNextGeneration, 350)
+  playButton.addEventListener('click', game.printNextGeneration);
+  // pauseButton.addEventListener('click', clearInterval(game.printNextGeneration));
   game.createBoard();
   game.firstGlider();
 })
