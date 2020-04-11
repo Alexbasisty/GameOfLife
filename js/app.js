@@ -66,9 +66,33 @@ document.addEventListener('DOMContentLoaded', () => {
         return 1
       }
     }
+
+    computeNextGeneration = () => {
+      let futureStates = [];
+      for(let i = 1; i <= 10; i++) {
+        for(let j = 1; j <= 10; j++) {
+          futureStates.push(this.computeCellNextState(i, j))
+        }
+      }
+      return futureStates;
+    }
+
+    printNextGeneration = () => {
+      let states = this.computeNextGeneration()
+      for(let i = 0; i < 100; i++) {
+        if(states[i] === 1) {
+          this.cells[i].classList.add('live')
+        } else {
+          this.cells[i].classList.remove('live')
+        }
+      }
+    }
+
   }
 
   const game = new GameOfLife(10,10);
+  const playButton = document.getElementById('play');
+  playButton.addEventListener('click', game.printNextGeneration)
   game.createBoard();
   game.firstGlider();
 })
